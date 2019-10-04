@@ -972,7 +972,7 @@ Logic.registerPanel(P_CONTAINER_EDIT, {
   showAssignedContainers(assignments) {
     const assignmentPanel = document.getElementById("edit-sites-assigned");
     const assignmentKeys = Object.keys(assignments);
-    assignmentPanel.hidden = !(assignmentKeys.length > 0);
+    assignmentPanel.hidden = false; //!(assignmentKeys.length > 0);
     if (assignments) {
       const tableElement = assignmentPanel.querySelector(".assigned-sites-list");
       /* Remove previous assignment list,
@@ -980,6 +980,27 @@ Logic.registerPanel(P_CONTAINER_EDIT, {
       while (tableElement.firstChild) {
         tableElement.firstChild.remove();
       }
+
+      const addNewInputBox = assignmentPanel.querySelector("#edit-sites-new-assignment-input");
+      addNewInputBox.addEventListener("change", async (e) => {
+        const value = e.target.value.trim();
+        if (value.length === 0) return;
+        e.target.value = "";
+        const url = value.startsWith("http://") || value.startsWith("https://") ? value : "https://" + value;
+        const userContextId = Logic.currentUserContextId();
+        const currentTab = await Logic.currentTab();
+        console.log("Adding " + url + " to container " + userContextId);
+        await Logic.setOrRemoveAssignment(currentTab.id, url, userContextId, false);
+        await browser.runtime.sendMessage({
+          method: "neverAsk",
+          neverAsk: true,
+          pageUrl: url
+        });
+        assignments = await Logic.getAssignmentObjectByContainer(userContextId);
+        console.log(assignments);
+        this.showAssignedContainers(assignments);
+      });
+
       assignmentKeys.forEach((siteKey) => {
         const site = assignments[siteKey];
         const trElement = document.createElement("div");
