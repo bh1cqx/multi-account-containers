@@ -989,7 +989,7 @@ Logic.registerPanel(P_CONTAINER_EDIT, {
         const url = value.startsWith("http://") || value.startsWith("https://") ? value : "https://" + value;
         const userContextId = Logic.currentUserContextId();
         const currentTab = await Logic.currentTab();
-        console.log("Adding " + url + " to container " + userContextId);
+        //console.log("Adding " + url + " to container " + userContextId);
         await Logic.setOrRemoveAssignment(currentTab.id, url, userContextId, false);
         await browser.runtime.sendMessage({
           method: "neverAsk",
@@ -997,7 +997,7 @@ Logic.registerPanel(P_CONTAINER_EDIT, {
           pageUrl: url
         });
         assignments = await Logic.getAssignmentObjectByContainer(userContextId);
-        console.log(assignments);
+        //console.log(assignments);
         this.showAssignedContainers(assignments);
       });
 

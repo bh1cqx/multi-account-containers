@@ -807,12 +807,11 @@ span ~ .panel-header-text {
   padding-inline-start: 16px;
 }
 
-/*#edit-sites-new-assignment-input {*/
 #edit-sites-assigned > .new-assignment-input {
   flex: 1;
+  max-inline-size: 300px;
   padding-inline-end: 16px;
   padding-inline-start: 12px;
-  max-inline-size: 300px;
 }
 
 .assigned-sites-list > div {
